@@ -80,6 +80,7 @@ func GetAllSriovEnabledDevices() (devices []string) {
 }
 
 //GetPfMaxSendingRate gets the maximum sending rate of a given PF device name
+//the rate returned is in bits/second
 func GetPfMaxSendingRate(pfNetdevName string) (rate uint, err error) {
 	deviceDir := GetNetDevDeviceDir(pfNetdevName)
 	infinibandDir := filepath.Join(deviceDir, "device", "infiniband")
