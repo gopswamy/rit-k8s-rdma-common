@@ -80,7 +80,7 @@ func GetAllSriovEnabledDevices() (devices []string) {
 }
 
 //GetPfMaxSendingRate gets the maximum sending rate of a given PF device name
-//the rate returned is in bits/second
+//the rate returned is in Mb/second
 func GetPfMaxSendingRate(pfNetdevName string) (rate uint, err error) {
 	deviceDir := GetNetDevDeviceDir(pfNetdevName)
 	infinibandDir := filepath.Join(deviceDir, "infiniband")
@@ -121,14 +121,12 @@ func GetPfMaxSendingRate(pfNetdevName string) (rate uint, err error) {
 
 	rateSpeedPerSec := strings.TrimSpace(rateStrPieces[1])
 	switch rateSpeedPerSec {
-	case "Kb/sec":
-		rate = uint(rateNum * 1000)
 	case "Mb/sec":
-		rate = uint(rateNum * 1000 * 1000)
+		rate = uint(rateNum)
 	case "Gb/sec":
-		rate = uint(rateNum * 1000 * 1000 * 1000)
+		rate = uint(rateNum * 1000)
 	case "Tb/sec":
-		rate = uint(rateNum * 1000 * 1000 * 1000 * 1000)
+		rate = uint(rateNum * 1000 * 1000)
 	default:
 		err = fmt.Errorf("Unknown rate type[%s] for rate file[%s]", rateSpeedPerSec, rateFile.Path)
 		return
