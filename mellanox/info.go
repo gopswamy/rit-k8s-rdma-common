@@ -83,7 +83,7 @@ func GetAllSriovEnabledDevices() (devices []string) {
 //the rate returned is in bits/second
 func GetPfMaxSendingRate(pfNetdevName string) (rate uint, err error) {
 	deviceDir := GetNetDevDeviceDir(pfNetdevName)
-	infinibandDir := filepath.Join(deviceDir, "device", "infiniband")
+	infinibandDir := filepath.Join(deviceDir, "infiniband")
 	infinibandDevices, err := LsFilesWithPrefix(infinibandDir, "", false)
 	if err != nil || len(infinibandDevices) == 0 {
 		err = fmt.Errorf("Failed to get any devices in infiniband dir[%s]", infinibandDir)
@@ -98,7 +98,7 @@ func GetPfMaxSendingRate(pfNetdevName string) (rate uint, err error) {
 	}
 
 	rateFile := FileObject{
-		Path: filepath.Join(portsDir, portsAvailable[0], fmt.Sprintf("%d", rate)),
+		Path: filepath.Join(portsDir, portsAvailable[0], "rate"),
 	}
 	rateStr, err := rateFile.Read()
 	if err != nil {
@@ -116,18 +116,19 @@ func GetPfMaxSendingRate(pfNetdevName string) (rate uint, err error) {
 	rateNum, err := strconv.ParseUint(rateStrNum, 10, 64)
 	if err != nil {
 		err = fmt.Errorf("Could not convert string rate[%s] to uint in rate file[%s]: %s", rateFile.Path, rateStrNum, err)
+		return
 	}
 
-	rateSpeedPerSec := strings.TrimSpace(rateStrPieces[0])
+	rateSpeedPerSec := strings.TrimSpace(rateStrPieces[1])
 	switch rateSpeedPerSec {
 	case "Kb/sec":
-		rateNum = rateNum * 1000
+		rate = uint(rateNum * 1000)
 	case "Mb/sec":
-		rateNum = rateNum * 1000 * 1000
+		rate = uint(rateNum * 1000 * 1000)
 	case "Gb/sec":
-		rateNum = rateNum * 1000 * 1000 * 1000
+		rate = uint(rateNum * 1000 * 1000 * 1000)
 	case "Tb/sec":
-		rateNum = rateNum * 1000 * 1000 * 1000 * 1000
+		rate = uint(rateNum * 1000 * 1000 * 1000 * 1000)
 	default:
 		err = fmt.Errorf("Unknown rate type[%s] for rate file[%s]", rateSpeedPerSec, rateFile.Path)
 		return
