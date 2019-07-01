@@ -1,6 +1,8 @@
 package knapsack_pod_placement
 
 import (
+	"log"
+
 	"github.com/cal8384/k8s-rdma-common/rdma_hardware_info"
 )
 
@@ -22,12 +24,14 @@ func PlacePod(requested_interfaces []RdmaInterfaceRequest, pfs_available []rdma_
 
 	//while(not done)
 	for {
+		log.Println("Outer loop iteration:")
+		log.Println("\tcurrent_requested=", current_requested, " (value=", requested_interfaces[current_requested].MinTxRate, ")")
 		//move to next placement for current item
 		for placements[current_requested]++; placements[current_requested] < len(pfs_available); placements[current_requested]++ {
 			var cur_pf *rdma_hardware_info.PF = &(pfs_available[placements[current_requested]])
 			//if the current pf can fit the current requested interface
 			if(((*cur_pf).CapacityVFs - (*cur_pf).UsedVFs) > 0) {
-				if((int((*cur_pf).CapacityTxRate) - int((*cur_pf).UsedTxRate)) > int(requested_interfaces[current_requested].MinTxRate)) {
+				if((int((*cur_pf).CapacityTxRate) - int((*cur_pf).UsedTxRate)) >= int(requested_interfaces[current_requested].MinTxRate)) {
 					//add the current interface's bandwidth to the pf's used bw
 					(*cur_pf).UsedTxRate += requested_interfaces[current_requested].MinTxRate
 					(*cur_pf).UsedVFs += 1
@@ -36,6 +40,7 @@ func PlacePod(requested_interfaces []RdmaInterfaceRequest, pfs_available []rdma_
 				}
 			}
 		}
+		log.Println("\tplacement=", placements[current_requested])
 
 		//if there was no next placement
 		if(placements[current_requested] >= len(pfs_available)) {
@@ -46,6 +51,8 @@ func PlacePod(requested_interfaces []RdmaInterfaceRequest, pfs_available []rdma_
 				break
 			//else
 			} else {
+				//reset placement of current item
+				placements[current_requested] = -1
 				//decrement current item
 				current_requested--
 				//subtract the bw and vf of current item from the pf it was allocated to
