@@ -1,6 +1,5 @@
 package rdma_hardware_info
 
-
 type PF struct {
 	UsedTxRate     uint  `json:"used_tx_rate"`
 	CapacityTxRate uint  `json:"capacity_tx_rate"`
@@ -23,10 +22,4 @@ type VF struct {
 	VGTPlus    string `json:"vgt_plus"`
 	RateGroup  uint   `json:"rate_group"`
 	Allocated  bool   `json:"allocated"`
-}
-
-type UserConfig struct {
-	Mode           string   `json:"mode"`
-	PfNetdevices   []string `json:"pfNetdevices"`
-	PfMaxBandwidth []int    `json:"pfMaxBandwidth"`
 }
