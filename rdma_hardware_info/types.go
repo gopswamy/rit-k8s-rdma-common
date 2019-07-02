@@ -4,11 +4,12 @@ package rdma_hardware_info
 //that exists on a machine. The PF in this case is directly related
 //to one that is SRIOV enabled. It contains metadata about that device.
 type PF struct {
-	UsedTxRate     uint  `json:"used_tx_rate"`
-	CapacityTxRate uint  `json:"capacity_tx_rate"`
-	UsedVFs        uint  `json:"used_vfs"`
-	CapacityVFs    uint  `json:"capacity_vfs"`
-	VFs            []*VF `json:"vfs"`
+	Name           string `json:"name"`
+	UsedTxRate     uint   `json:"used_tx_rate"`
+	CapacityTxRate uint   `json:"capacity_tx_rate"`
+	UsedVFs        uint   `json:"used_vfs"`
+	CapacityVFs    uint   `json:"capacity_vfs"`
+	VFs            []*VF  `json:"vfs"`
 }
 
 //VF stands for 'Virtual Function' and is a representation of VF's
