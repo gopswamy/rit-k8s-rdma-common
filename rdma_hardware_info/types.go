@@ -1,5 +1,8 @@
 package rdma_hardware_info
 
+//PF stands for 'Physical Function' and is a representation of a PF
+//that exists on a machine. The PF in this case is directly related
+//to one that is SRIOV enabled. It contains metadata about that device.
 type PF struct {
 	UsedTxRate     uint  `json:"used_tx_rate"`
 	CapacityTxRate uint  `json:"capacity_tx_rate"`
@@ -8,6 +11,9 @@ type PF struct {
 	VFs            []*VF `json:"vfs"`
 }
 
+//VF stands for 'Virtual Function' and is a representation of VF's
+//that exist under an SRIOV enabled device. It includes information
+//about what the current configuration of the VF is.
 type VF struct {
 	VFNumber   uint   `json:"vf"`
 	MAC        string `json:"mac"`
