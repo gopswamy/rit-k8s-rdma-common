@@ -12,6 +12,12 @@ type RdmaInterfaceRequest struct {
 }
 
 func PlacePod(requested_interfaces []RdmaInterfaceRequest, pfs_available []rdma_hardware_info.PF) ([]int, bool) {
+	//if no interfaces are required
+	if(len(requested_interfaces) <= 0) {
+		//request is trivially satisfiable
+		return []int{}, true
+	}
+
 	//current_requested = 0
 	var current_requested int = 0
 	//placements = []int (initialize to all -1)
