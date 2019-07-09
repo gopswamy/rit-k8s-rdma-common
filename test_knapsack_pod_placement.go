@@ -27,7 +27,7 @@ func test_case_1() {
 	req[1].MinTxRate = 3
 	req[2].MinTxRate = 8
 
-	allocation, possible := knapsack_pod_placement.PlacePod(req, pfs)
+	allocation, possible := knapsack_pod_placement.PlacePod(req, pfs, true)
 
 	log.Println("Possible: ", possible)
 	log.Println("Allocation: ", allocation)
@@ -54,7 +54,7 @@ func test_case_2() {
 	req[1].MinTxRate = 3
 	req[2].MinTxRate = 8
 
-	allocation, possible := knapsack_pod_placement.PlacePod(req, pfs)
+	allocation, possible := knapsack_pod_placement.PlacePod(req, pfs, true)
 
 	log.Println("Possible: ", possible)
 	log.Println("Allocation: ", allocation)
@@ -82,7 +82,7 @@ func test_case_3() {
 	req[3].MinTxRate = 3
 	req[4].MinTxRate = 3
 
-	allocation, possible := knapsack_pod_placement.PlacePod(req, pfs)
+	allocation, possible := knapsack_pod_placement.PlacePod(req, pfs, true)
 
 	log.Println("Possible: ", possible)
 	log.Println("Allocation: ", allocation)
@@ -110,7 +110,7 @@ func test_case_4() {
 	req[3].MinTxRate = 3
 	req[4].MinTxRate = 3
 
-	allocation, possible := knapsack_pod_placement.PlacePod(req, pfs)
+	allocation, possible := knapsack_pod_placement.PlacePod(req, pfs, true)
 
 	log.Println("Possible: ", possible)
 	log.Println("Allocation: ", allocation)

@@ -11,7 +11,7 @@ type RdmaInterfaceRequest struct {
         MaxTxRate uint `json:"max_tx_rate"`
 }
 
-func PlacePod(requested_interfaces []RdmaInterfaceRequest, pfs_available []rdma_hardware_info.PF) ([]int, bool) {
+func PlacePod(requested_interfaces []RdmaInterfaceRequest, pfs_available []rdma_hardware_info.PF, debug_logging bool) ([]int, bool) {
 	//if no interfaces are required
 	if(len(requested_interfaces) <= 0) {
 		//request is trivially satisfiable
@@ -30,8 +30,10 @@ func PlacePod(requested_interfaces []RdmaInterfaceRequest, pfs_available []rdma_
 
 	//while(not done)
 	for {
-		log.Println("Outer loop iteration:")
-		log.Println("\tcurrent_requested=", current_requested, " (value=", requested_interfaces[current_requested].MinTxRate, ")")
+		if(debug_logging) {
+			log.Println("Outer loop iteration:")
+			log.Println("\tcurrent_requested=", current_requested, " (value=", requested_interfaces[current_requested].MinTxRate, ")")
+		}
 		//move to next placement for current item
 		for placements[current_requested]++; placements[current_requested] < len(pfs_available); placements[current_requested]++ {
 			var cur_pf *rdma_hardware_info.PF = &(pfs_available[placements[current_requested]])
@@ -46,7 +48,9 @@ func PlacePod(requested_interfaces []RdmaInterfaceRequest, pfs_available []rdma_
 				}
 			}
 		}
-		log.Println("\tplacement=", placements[current_requested])
+		if(debug_logging) {
+			log.Println("\tplacement=", placements[current_requested])
+		}
 
 		//if there was no next placement
 		if(placements[current_requested] >= len(pfs_available)) {
