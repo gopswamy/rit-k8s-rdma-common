@@ -12,6 +12,16 @@ type PF struct {
 	VFs            []*VF  `json:"vfs"`
 }
 
+//FindAssociatedMac finds vf of mac if exists
+func (pf *PF) FindAssociatedMac(mac string) *VF {
+	for _, vf := range pf.VFs {
+		if vf.MAC == mac {
+			return vf
+		}
+	}
+	return nil
+}
+
 //VF stands for 'Virtual Function' and is a representation of VF's
 //that exist under an SRIOV enabled device. It includes information
 //about what the current configuration of the VF is.
