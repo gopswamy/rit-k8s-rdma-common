@@ -116,6 +116,9 @@ func test_case_4() {
 	log.Println("Allocation: ", allocation)
 }
 
+/*
+	Test program for RDMA bacndwidth allocation algorithm.
+*/
 func main() {
 	log.Println("TEST CASE 1:")
 	test_case_1()
