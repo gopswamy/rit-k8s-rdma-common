@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/rit-k8s-rdma/k8s-rdma-common/knapsack_pod_placement"
-	"github.com/rit-k8s-rdma/k8s-rdma-common/rdma_hardware_info"
+	"github.com/rit-k8s-rdma/rit-k8s-rdma-common/knapsack_pod_placement"
+	"github.com/rit-k8s-rdma/rit-k8s-rdma-common/rdma_hardware_info"
 )
 
 /*
