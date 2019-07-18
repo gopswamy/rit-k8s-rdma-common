@@ -3,14 +3,14 @@ package knapsack_pod_placement
 import (
 	"log"
 
-	"github.com/cal8384/k8s-rdma-common/rdma_hardware_info"
+	"github.com/rit-k8s-rdma/rit-k8s-rdma-common/rdma_hardware_info"
 )
 
 //Structure that defines the parameters that an RDMA interface can have in a
 //	pod YAML file.
 type RdmaInterfaceRequest struct {
-        MinTxRate uint `json:"min_tx_rate"`
-        MaxTxRate uint `json:"max_tx_rate"`
+	MinTxRate uint `json:"min_tx_rate"`
+	MaxTxRate uint `json:"max_tx_rate"`
 }
 
 //PlacePod takes in a list of required RDMA interfaces and a list of PFs
@@ -28,7 +28,7 @@ func PlacePod(requested_interfaces []RdmaInterfaceRequest,
 	debug_logging bool) ([]int, bool) {
 
 	//if no interfaces are required
-	if(len(requested_interfaces) <= 0) {
+	if len(requested_interfaces) <= 0 {
 		//request is trivially satisfiable
 		return []int{}, true
 	}
@@ -47,7 +47,7 @@ func PlacePod(requested_interfaces []RdmaInterfaceRequest,
 
 	//while we haven't satisfied the request or run out of placement options
 	for {
-		if(debug_logging) {
+		if debug_logging {
 			log.Println("Outer loop iteration:")
 			log.Println("\tcurrent_requested=", current_requested, " (value=", requested_interfaces[current_requested].MinTxRate, ")")
 		}
@@ -56,8 +56,8 @@ func PlacePod(requested_interfaces []RdmaInterfaceRequest,
 		for placements[current_requested]++; placements[current_requested] < len(pfs_available); placements[current_requested]++ {
 			var cur_pf *rdma_hardware_info.PF = &(pfs_available[placements[current_requested]])
 			//if the current pf can fit the current requested interface
-			if(((*cur_pf).CapacityVFs - (*cur_pf).UsedVFs) > 0) {
-				if((int((*cur_pf).CapacityTxRate) - int((*cur_pf).UsedTxRate)) >= int(requested_interfaces[current_requested].MinTxRate)) {
+			if ((*cur_pf).CapacityVFs - (*cur_pf).UsedVFs) > 0 {
+				if (int((*cur_pf).CapacityTxRate) - int((*cur_pf).UsedTxRate)) >= int(requested_interfaces[current_requested].MinTxRate) {
 					//add the current interface's bandwidth to the pf's used bw
 					(*cur_pf).UsedTxRate += requested_interfaces[current_requested].MinTxRate
 					(*cur_pf).UsedVFs += 1
@@ -66,20 +66,20 @@ func PlacePod(requested_interfaces []RdmaInterfaceRequest,
 			}
 		}
 
-		if(debug_logging) {
+		if debug_logging {
 			log.Println("\tplacement=", placements[current_requested])
 		}
 
 		//if there was no valid placement for the current item,
 		//	try to backtrack to the previous one
-		if(placements[current_requested] >= len(pfs_available)) {
+		if placements[current_requested] >= len(pfs_available) {
 			//if the current item was item #0
-			if(current_requested == 0) {
+			if current_requested == 0 {
 				//then there is no backtracking left to do,
 				//	the request cannot be satisfied.
 				all_interfaces_sucessfully_placed = false
 				break
-			//otherwise, if we can still backtrack to the previous item
+				//otherwise, if we can still backtrack to the previous item
 			} else {
 				//reset placement of current item
 				placements[current_requested] = -1
@@ -92,15 +92,15 @@ func PlacePod(requested_interfaces []RdmaInterfaceRequest,
 				continue
 			}
 
-		//otherwise, there was a valid placement for the current item
+			//otherwise, there was a valid placement for the current item
 		} else {
 			//if current item was the last one
-			if(current_requested == (len(requested_interfaces) - 1)) {
+			if current_requested == (len(requested_interfaces) - 1) {
 				//we have satisfied the whole request
 				all_interfaces_sucessfully_placed = true
 				break
 
-			//otherwise
+				//otherwise
 			} else {
 				//move to the next item
 				current_requested++
@@ -110,7 +110,7 @@ func PlacePod(requested_interfaces []RdmaInterfaceRequest,
 	}
 
 	//if the request could be satisfied
-	if(all_interfaces_sucessfully_placed) {
+	if all_interfaces_sucessfully_placed {
 		//return the allocation that satisfied it
 		return placements, true
 	}

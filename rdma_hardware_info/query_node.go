@@ -14,26 +14,26 @@ import (
 //	wrong.
 func QueryNode(node_address string, port string, timeout_ms int) ([]PF, error) {
 	//setup a client to query the node
-	http_client := http.Client {
+	http_client := http.Client{
 		Timeout: time.Duration(time.Duration(timeout_ms) * time.Millisecond),
 	}
 
 	//perform http request
 	resp, err := http_client.Get(fmt.Sprintf("http://%s:%s/%s", node_address, port, RdmaInfoUrl))
-	if(err != nil) {
+	if err != nil {
 		return []PF{}, err
 	}
 
 	//read response
 	data, err := ioutil.ReadAll(resp.Body)
-	if(err != nil) {
+	if err != nil {
 		return []PF{}, err
 	}
 
 	//deserialize response into a list of PF objects
 	var pfs []PF
 	err = json.Unmarshal(data, &pfs)
-	if(err != nil) {
+	if err != nil {
 		return []PF{}, err
 	}
 
