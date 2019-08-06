@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod1
+  annotations:
+    rdma_interfaces_required: '[
+        {"min_tx_rate": 15000, "max_tx_rate": 20000},
+        {"min_tx_rate": 5000},
+        {}
+    ]'
+spec:
+  restartPolicy: OnFailure
+  containers:
+  - image: mellanoxubuntudocker:latest
+    name: mofed-test-ctr1
+    securityContext:
+      capabilities:
+        add: [ "IPC_LOCK" ]
+    resources:
+      limits:
+        rdma-sriov/dev-infiniband-mount: 1
+    imagePullPolicy: IfNotPresent
+    command:
+    - sh
+    - -c
+    - |
+      ls -l /dev/infiniband /sys/class/net
+      sleep 1000000
+  nodeSelector:
+    nodeName: "revvit"
