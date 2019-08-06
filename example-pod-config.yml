@@ -26,5 +26,3 @@ spec:
     - |
       ls -l /dev/infiniband /sys/class/net
       sleep 1000000
-  nodeSelector:
-    nodeName: "revvit"
