@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/rit-k8s-rdma/rit-k8s-rdma-common/knapsack_pod_placement"
-	"github.com/rit-k8s-rdma/rit-k8s-rdma-common/rdma_hardware_info"
+	"github.com/gopswamy/rit-k8s-rdma-common/knapsack_pod_placement"
+	"rdma_hardware_info"
 )
 
 /*
@@ -27,8 +27,9 @@ func test_case_1() {
 	req[1].MinTxRate = 3
 	req[2].MinTxRate = 8
 
-	allocation, possible := knapsack_pod_placement.PlacePod(req, pfs, true)
+	capacity,allocation, possible := knapsack_pod_placement.PlacePod(req, pfs, true)
 
+	log.Println("totalCapacity",capacity)
 	log.Println("Possible: ", possible)
 	log.Println("Allocation: ", allocation)
 }
@@ -54,8 +55,9 @@ func test_case_2() {
 	req[1].MinTxRate = 3
 	req[2].MinTxRate = 8
 
-	allocation, possible := knapsack_pod_placement.PlacePod(req, pfs, true)
+	capacity,allocation, possible := knapsack_pod_placement.PlacePod(req, pfs, true)
 
+	log.Println("totalCapacity",capacity)
 	log.Println("Possible: ", possible)
 	log.Println("Allocation: ", allocation)
 }
@@ -82,8 +84,9 @@ func test_case_3() {
 	req[3].MinTxRate = 3
 	req[4].MinTxRate = 3
 
-	allocation, possible := knapsack_pod_placement.PlacePod(req, pfs, true)
+	capacity,allocation, possible := knapsack_pod_placement.PlacePod(req, pfs, true)
 
+	log.Println("totalCapacity",capacity)
 	log.Println("Possible: ", possible)
 	log.Println("Allocation: ", allocation)
 }
@@ -110,8 +113,9 @@ func test_case_4() {
 	req[3].MinTxRate = 3
 	req[4].MinTxRate = 3
 
-	allocation, possible := knapsack_pod_placement.PlacePod(req, pfs, true)
+	capacity,allocation, possible := knapsack_pod_placement.PlacePod(req, pfs, true)
 
+	log.Println("totalCapacity",capacity)
 	log.Println("Possible: ", possible)
 	log.Println("Allocation: ", allocation)
 }

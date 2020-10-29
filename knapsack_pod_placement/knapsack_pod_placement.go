@@ -3,7 +3,7 @@ package knapsack_pod_placement
 import (
 	"log"
 
-	"github.com/rit-k8s-rdma/rit-k8s-rdma-common/rdma_hardware_info"
+	"github.com/rit-k8s-rdma-common/rdma_hardware_info"
 )
 
 //Structure that defines the parameters that an RDMA interface can have in a
@@ -25,16 +25,24 @@ type RdmaInterfaceRequest struct {
 //	backtracking algorithm.
 func PlacePod(requested_interfaces []RdmaInterfaceRequest,
 	pfs_available []rdma_hardware_info.PF,
-	debug_logging bool) ([]int, bool) {
+	debug_logging bool) (int,[]int, bool) {
 
 	//if no interfaces are required
 	if len(requested_interfaces) <= 0 {
 		//request is trivially satisfiable
-		return []int{}, true
+		return 0,[]int{}, true
 	}
 
 	//index of the current requested item being processed in the 'requested_interfaces' list
 	var current_requested int = 0
+
+	//total capacity
+	var total_capacity = 0
+	for i:=0; i<len(pfs_available);i++{
+		var cur_pf *rdma_hardware_info.PF = &(pfs_available[i])
+		total_capacity += (int)(cur_pf.CapacityTxRate)-(int)(cur_pf.UsedTxRate)
+	}
+
 	//list of which PF each of the requested interfaces can be "placed" on
 	//	to satisfy the overall request. -1 means a requested interface
 	//	has not been placed yet.
@@ -112,9 +120,9 @@ func PlacePod(requested_interfaces []RdmaInterfaceRequest,
 	//if the request could be satisfied
 	if all_interfaces_sucessfully_placed {
 		//return the allocation that satisfied it
-		return placements, true
+		return total_capacity,placements, true
 	}
 
 	//request could not be satisfied, just return empty allocation
-	return []int{}, false
+	return 0,[]int{}, false
 }
