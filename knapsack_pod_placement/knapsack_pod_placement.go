@@ -3,7 +3,7 @@ package knapsack_pod_placement
 import (
 	"log"
 
-	"github.com/rit-k8s-rdma-common/rdma_hardware_info"
+	"github.com/gopswamy/rit-k8s-rdma-common/rdma_hardware_info"
 )
 
 //Structure that defines the parameters that an RDMA interface can have in a

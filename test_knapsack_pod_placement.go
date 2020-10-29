@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/gopswamy/rit-k8s-rdma-common/knapsack_pod_placement"
-	"rdma_hardware_info"
+	"github.com/gopswamy/rit-k8s-rdma-common/rdma_hardware_info"
 )
 
 /*
